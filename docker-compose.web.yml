@@ -42,7 +42,7 @@ services:
     build:
       context: app
       args:
-        install_gunicorn: "true"
+        install_wsgi_reqs: "true"
     command: [
       "./wait-for-it.sh", "db:5432", "--",
       "gunicorn", "--bind", "0.0.0.0:8000", "gscoin.wsgi"

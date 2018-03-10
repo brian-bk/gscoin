@@ -7,8 +7,8 @@ WORKDIR /app
 ADD requirements.txt .
 RUN pip install -r requirements.txt
 
-ARG install_gunicorn=false
-RUN if [ "$install_gunicorn" = "true" ]; then pip install "gunicorn==19.7.1"; else echo Not installing gunicorn; fi
+ADD wsgi_requirements.txt .
+ARG install_wsgi_reqs=false
+RUN if [ "$install_wsgi_reqs" = "true" ]; then pip install -r wsgi_requirements.txt; else echo Not installing wsgi reqs; fi
 
 ADD . /app
-
