@@ -1,0 +1,50 @@
+version: '3'
+# Development
+
+services:
+  migration:
+    build:
+      context: app
+    command: [
+      "./wait-for-it.sh", "db:5432", "--",
+      "python3", "manage.py", "migrate", "--noinput"
+    ]
+    # Use secret.env for local development only
+    env_file:
+      - secret.env
+    environment:
+      - DEBUG=1
+
+  db:
+    image: postgres
+  app:
+    build:
+      context: app
+    command: [
+      "./wait-for-it.sh", "db:5432", "--",
+      "python3", "manage.py", "runserver", "0.0.0.0:8000"
+    ]
+    # Use secret.env for local development only
+    env_file:
+      - secret.env
+    environment:
+      - ALLOWED_HOSTS=app;localhost
+      - DEBUG=1
+    ports:
+      - "8000:8000"
+    # Mount volume for local development only
+    volumes:
+      - ./app:/app
+  client:
+    build:
+      context: client
+    command: [
+      "./wait-for-it.sh", "app:8000", "--",
+      "npm", "run", "start",
+    ]
+    ports:
+      - "3000:3000"
+    # Mount volume for local development only
+    volumes:
+      - ./client/public:/client/public
+      - ./client/src:/client/src

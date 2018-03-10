@@ -1,0 +1,63 @@
+version: '3'
+# Non-Prod (but mimics prod)
+
+services:
+  collectstatic:
+    build:
+      context: app
+    command: [
+      "bash", "-c",
+      "python3 manage.py collectstatic --noinput && mkdir -p /content/static && cp -R ./static/* /content/static"
+    ]
+    # Use secret.env for local development only
+    env_file:
+      - secret.env
+    volumes:
+      - ./content:/content
+  buildclient:
+    build:
+      context: client
+      args:
+        run_build: "true"
+    command: [
+      "bash", "-c",
+      "mkdir -p /content && cp -R ./build/* /content"
+    ]
+    volumes:
+      - ./content:/content
+  migration:
+    build:
+      context: app
+    command: [
+      "./wait-for-it.sh", "db:5432", "--",
+      "python3", "manage.py", "migrate", "--noinput"
+    ]
+    # Use secret.env for local development only
+    env_file:
+      - secret.env
+
+  db:
+    image: postgres
+  app:
+    build:
+      context: app
+      args:
+        install_gunicorn: "true"
+    command: [
+      "./wait-for-it.sh", "db:5432", "--",
+      "gunicorn", "--bind", "0.0.0.0:8000", "gscoin.wsgi"
+    ]
+    ports:
+      - "8000:8000"
+    # Use secret.env for local development only
+    env_file:
+      - secret.env
+    environment:
+      - ALLOWED_HOSTS=app;localhost
+  web:
+    build:
+      context: web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./content:/usr/share/nginx/html
