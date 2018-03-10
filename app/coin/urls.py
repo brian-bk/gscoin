@@ -2,6 +2,10 @@ from django.conf.urls import include, url
 from rest_framework.routers import DefaultRouter
 
 from . import views
+from .apps import CoinConfig
+
+
+app_name = CoinConfig.name
 
 router = DefaultRouter()
 router.register(r'wallets', views.WalletViewSet, base_name='wallet')

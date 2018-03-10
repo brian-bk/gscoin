@@ -6,7 +6,7 @@ from .forms import RegisterForm
 
 
 class RegisterView(CreateView):
-    template_name = 'auth/register.html'
+    template_name = 'authentication/register.html'
     form_class = RegisterForm
     success_url = '/'
 
@@ -25,10 +25,10 @@ class RegisterView(CreateView):
 
 
 class LoginView(auth_views.LoginView):
-    template_name = 'auth/login.html'
+    template_name = 'authentication/login.html'
     redirect_authenticated_user = True
     success_url = '/'
 
 
 class LogoutView(auth_views.LogoutView):
-    template_name = 'auth/logout.html'
+    template_name = 'authentication/logout.html'
