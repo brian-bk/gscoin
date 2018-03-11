@@ -1,5 +1,5 @@
 version: '3'
-# Non-Prod (but mimics prod)
+# Non-Prod (but uses nginx proxy to serve whole app and client)
 
 services:
   collectstatic:
@@ -29,28 +29,32 @@ services:
     build:
       context: app
     command: [
-      "./wait-for-it.sh", "db:5432", "--",
-      "python3", "manage.py", "migrate", "--noinput"
+      "bash", "-c",
+      "./wait-for-it.sh $${POSTGRES_HOST}:5432 -- python3 manage.py migrate --noinput"
     ]
     # Use secret.env for local development only
     env_file:
+      - db.env
       - secret.env
 
   db:
     image: postgres
+    env_file:
+      - db.env
   app:
     build:
       context: app
       args:
         install_wsgi_reqs: "true"
     command: [
-      "./wait-for-it.sh", "db:5432", "--",
-      "gunicorn", "--bind", "0.0.0.0:8000", "gscoin.wsgi"
+      "bash", "-c",
+      "./wait-for-it.sh $${POSTGRES_HOST}:5432 -- gunicorn --bind 0.0.0.0:8000 gscoin.wsgi"
     ]
     ports:
       - "8000:8000"
     # Use secret.env for local development only
     env_file:
+      - db.env
       - secret.env
     environment:
       - ALLOWED_HOSTS=app;localhost

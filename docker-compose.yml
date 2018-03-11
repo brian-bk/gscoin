@@ -6,26 +6,30 @@ services:
     build:
       context: app
     command: [
-      "./wait-for-it.sh", "db:5432", "--",
-      "python3", "manage.py", "migrate", "--noinput"
+      "bash", "-c",
+      "./wait-for-it.sh $${POSTGRES_HOST}:5432 -- python3 manage.py migrate --noinput"
     ]
     # Use secret.env for local development only
     env_file:
+      - db.env
       - secret.env
     environment:
       - DEBUG=1
 
   db:
     image: postgres
+    env_file:
+      - db.env
   app:
     build:
       context: app
     command: [
-      "./wait-for-it.sh", "db:5432", "--",
-      "python3", "manage.py", "runserver", "0.0.0.0:8000"
+      "bash", "-c",
+      "./wait-for-it.sh $${POSTGRES_HOST}:5432 -- python3 manage.py runserver 0.0.0.0:8000"
     ]
     # Use secret.env for local development only
     env_file:
+      - db.env
       - secret.env
     environment:
       - ALLOWED_HOSTS=app;localhost
