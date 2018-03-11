@@ -3,11 +3,14 @@ from rest_framework import filters, mixins, permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Transaction, Wallet
+from .models import Transaction, Wallet, User
 from .serializers import TransactionSerializer, UserSerializer, WalletSerializer
 
 
 class AuthUser(APIView):
+    """
+    Retrieve current logged-in user
+    """
     permission_classes = (permissions.IsAuthenticated, )
 
     def get(self, request, format=None):
@@ -17,6 +20,9 @@ class AuthUser(APIView):
 
 
 class OwnedWalletDetail(APIView):
+    """
+    Retrieve current logged-in user's wallet
+    """
     permission_classes = (permissions.IsAuthenticated, )
 
     def get(self, request, format=None):
@@ -29,6 +35,10 @@ class WalletViewSet(mixins.CreateModelMixin,
                     mixins.RetrieveModelMixin,
                     mixins.ListModelMixin,
                     viewsets.GenericViewSet):
+    """
+    Only a logged-in user can create a wallet, and they can
+    only do that once.
+    """
 
     queryset = Wallet.objects.all()
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
@@ -42,6 +52,12 @@ class TransactionViewSet(mixins.CreateModelMixin,
                          mixins.RetrieveModelMixin,
                          mixins.ListModelMixin,
                          viewsets.GenericViewSet):
+    """
+    Creating a transaction MUST also implement the increment/decrement
+    of wallets, this is done in the TransactionSerializer.
+    A read of the list of transaction will only return a user's
+    transactions.
+    """
 
     permission_classes = (permissions.IsAuthenticated, )
     serializer_class = TransactionSerializer

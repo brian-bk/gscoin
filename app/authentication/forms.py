@@ -3,10 +3,11 @@ from django.contrib.auth.models import User
 
 
 class RegisterForm(UserCreationForm):
+    """
+    Same as django.contrib.auth but require email
+    """
 
     def __init__(self, *args, **kwargs):
-        """Make email field required
-        """
         super(RegisterForm, self).__init__(*args, **kwargs)
         self.fields['email'].required = True
 

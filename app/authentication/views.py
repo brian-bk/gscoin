@@ -6,6 +6,11 @@ from .forms import RegisterForm
 
 
 class RegisterView(CreateView):
+    """
+    Generic create view. If user is authenticated, send
+    them to success_url. When a user registers, automatically
+    login that user immediately.
+    """
     template_name = 'authentication/register.html'
     form_class = RegisterForm
     success_url = '/'
@@ -25,10 +30,16 @@ class RegisterView(CreateView):
 
 
 class LoginView(auth_views.LoginView):
+    """
+    Standard login view from django.contrib.auth with custom template
+    """
     template_name = 'authentication/login.html'
     redirect_authenticated_user = True
     success_url = '/'
 
 
 class LogoutView(auth_views.LogoutView):
+    """
+    Standard logout view from django.contrib.auth with custom template
+    """
     template_name = 'authentication/logout.html'
