@@ -8,7 +8,13 @@ import Wallet from '../../models/Wallet';
 import WalletApi from '../../api/WalletApi';
 
 
+/**
+ * Send money form presented to user.
+ * @class
+ * @extends React.Component
+ */
 class SendMoneyForm extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +28,12 @@ class SendMoneyForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  /**
+   * When this form mounts, get the targetWalletId from the
+   * query string parameter. Fill in the target wallet info when this
+   * comes back.
+   * @method
+   */
   componentDidMount() {
     const targetWalletId = parseInt(queryString.parse(window.location.search)['target_wallet_id'], 10);
     WalletApi.getWallet(targetWalletId)
@@ -38,6 +50,10 @@ class SendMoneyForm extends Component {
       });
   }
 
+  /**
+   * Handle a change of form input
+   * @param {Proxy} event 
+   */
   handleInputChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -48,14 +64,21 @@ class SendMoneyForm extends Component {
     });
   }
 
+  /**
+   * Handle the form submition, on success redirect to the transaction id.
+   * @method
+   * @param {Proxy} event 
+   */
   handleSubmit(event) {
     event.preventDefault();
     this.setState({ isSubmitting: true });
-    TransactionApi.createTransaction({
-      amount: parseInt(this.state.amount, 10),
-      source_wallet_id: parseInt(this.props.sourceWallet.id, 10),
-      target_wallet_id: parseInt(this.state.targetWallet.id, 10)
-    })
+    const { sourceWallet } = this.props;
+    const { amount, targetWallet } = this.state;
+    TransactionApi.createTransaction(
+      parseInt(sourceWallet.id, 10),
+      parseInt(targetWallet.id, 10),
+      parseInt(amount, 10)
+    )
       .then(rawJson => {
         this.setState({
           redirectTransactionId: rawJson.id,

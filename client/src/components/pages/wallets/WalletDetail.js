@@ -4,7 +4,13 @@ import PropTypes from 'prop-types';
 import Wallet from '../../../models/Wallet';
 import WalletApi from '../../../api/WalletApi';
 
+/**
+ * Show a detailed wallet page
+ * @class
+ * @extends React.Component
+ */
 class WalletDetail extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -13,6 +19,9 @@ class WalletDetail extends Component {
     };
   }
 
+  /**
+   * Get the wallet
+   */
   componentDidMount() {
     if(this.props.walletId) {
       WalletApi.getWallet(this.props.walletId)

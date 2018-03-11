@@ -22,14 +22,8 @@ const AuthForm = ({ user }) => (
     </form>
 );
 
-
-
 AuthForm.propTypes = {
-
   user: PropTypes.object.isRequired,
-
 };
-
-
 
 export default AuthForm;

@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import UserWalletTable from '../../../containers/tables/UserWalletTable';
 import Wallet from '../../../models/Wallet';
 import WalletApi from '../../../api/WalletApi';
-import UserWalletTable from '../../../containers/tables/UserWalletTable';
 
+/**
+ * Show a list of wallets page
+ * @class
+ * @extends React.Component
+ */
 class WalletList extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +19,9 @@ class WalletList extends Component {
     };
   }
 
+  /**
+   * Get the wallets
+   */
   componentDidMount() {
     WalletApi.getWallets()
       .then(rawJsons => {

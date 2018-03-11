@@ -1,6 +1,16 @@
 import { getHeaders, getJson, successStatus } from './apiUtil';
 
+/**
+ * User fetch requests
+ * @class
+ */
 class UserApi {
+
+  /**
+   * Get authenticated user
+   * @method
+   * @returns {Promise} Response json data
+   */
   static getAuthUser() {
     return fetch('/api/coin/user/',
       {
@@ -12,6 +22,7 @@ class UserApi {
       .then(successStatus)
       .then(getJson);
   }
+
 }
 
 export default UserApi;

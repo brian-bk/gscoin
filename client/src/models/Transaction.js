@@ -2,7 +2,21 @@ import moment from 'moment';
 
 import Wallet from './Wallet';
 
+/**
+ * Transaction model
+ * @class
+ */
 class Transaction {
+
+  /**
+   * Create a transaction
+   * @param {number} id 
+   * @param {Wallet} sourceWallet 
+   * @param {Wallet} targetWallet 
+   * @param {Moment} timestamp 
+   * @param {number} amount 
+   * @returns {Transaction}
+   */
   constructor(id, sourceWallet, targetWallet, timestamp, amount) {
     this.id = id;
     this.sourceWallet = sourceWallet;
@@ -10,6 +24,12 @@ class Transaction {
     this.timestamp = timestamp;
     this.amount = amount;
   }
+
+  /**
+   * Get a transaction from raw json
+   * @param {object} rawJson 
+   * @returns {Transaction}
+   */
   static from(rawJson) {
     return new Transaction(
       parseInt(rawJson.id, 10),
@@ -19,6 +39,7 @@ class Transaction {
       parseInt(rawJson.amount, 10)
     );
   }
+
 }
 
 export default Transaction;

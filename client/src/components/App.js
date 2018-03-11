@@ -8,7 +8,6 @@ import NotFound from './pages/NotFound';
 import Transactions from './pages/Transactions';
 import Wallets from './pages/Wallets';
 
-
 const App = () => (
   <Router>
     <div id="App">

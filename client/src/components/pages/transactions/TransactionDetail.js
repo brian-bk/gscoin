@@ -4,7 +4,13 @@ import PropTypes from 'prop-types';
 import Transaction from '../../../models/Transaction';
 import TransactionApi from '../../../api/TransactionApi';
 
+/**
+ * Show a detailed transaction page
+ * @class
+ * @extends React.Component
+ */
 class TransactionDetail extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -13,6 +19,9 @@ class TransactionDetail extends Component {
     };
   }
 
+  /**
+   * Get the transaction
+   */
   componentDidMount() {
     if(this.props.transactionId) {
       TransactionApi.getTransaction(this.props.transactionId)

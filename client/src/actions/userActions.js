@@ -2,23 +2,22 @@ import * as types from './actionTypes';
 import User from '../models/User';
 import UserApi from '../api/UserApi';
 
-function loadAuthUserSuccess(user) {
-  return {type: types.LOAD_AUTH_USER_SUCCESS, user};
-}
+const loadAuthUserSuccess = user => (
+  {type: types.LOAD_AUTH_USER_SUCCESS, user}
+);
 
-function loadAuthUserFailure() {
-  return {type: types.LOAD_AUTH_USER_FAILURE};
-}
+const loadAuthUserFailure = () => (
+  {type: types.LOAD_AUTH_USER_FAILURE}
+);
 
-export function loadAuthUser() {
-  return (dispatch) => {
-    // const prevState = getState();
-    return UserApi.getAuthUser()
-      .then(rawJson => {
-        dispatch(loadAuthUserSuccess(User.from(rawJson)));
-      }).catch(error => {
-        dispatch(loadAuthUserFailure());
-        throw(error);
-      });
-  };
-}
+/**
+ * Load authenticated user and on fetch return update redux state
+ * @return {Promise} Authenticated user promise
+ */
+export const loadAuthUser = () => dispatch => UserApi.getAuthUser()
+  .then(rawJson => {
+    dispatch(loadAuthUserSuccess(User.from(rawJson)));
+  }).catch(error => {
+    dispatch(loadAuthUserFailure());
+    throw(error);
+  });

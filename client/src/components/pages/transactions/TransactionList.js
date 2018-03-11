@@ -5,7 +5,13 @@ import Transaction from '../../../models/Transaction';
 import TransactionApi from '../../../api/TransactionApi';
 import TransactionTable from '../../tables/TransactionTable';
 
+/**
+ * Show a list of transactions page
+ * @class
+ * @extends React.Component
+ */
 class TransactionList extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -14,6 +20,10 @@ class TransactionList extends Component {
     };
   }
 
+  /**
+   * Get the transactions
+   * @method
+   */
   componentDidMount() {
     TransactionApi.getTransactions()
       .then(rawJsons => {

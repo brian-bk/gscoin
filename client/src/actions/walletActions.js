@@ -2,23 +2,22 @@ import Wallet from '../models/Wallet';
 import WalletApi from '../api/WalletApi';
 import * as types from './actionTypes';
 
-function loadOwnedWalletSuccess(wallet) {
-  return {type: types.LOAD_OWNED_WALLET_SUCCESS, wallet};
-}
+const loadOwnedWalletSuccess = wallet => (
+  {type: types.LOAD_OWNED_WALLET_SUCCESS, wallet}
+);
 
-function loadOwnedWalletFailure() {
-  return {type: types.LOAD_OWNED_WALLET_FAILURE};
-}
+const loadOwnedWalletFailure = () => (
+  {type: types.LOAD_OWNED_WALLET_FAILURE}
+);
 
-export function loadOwnedWallet() {
-  return (dispatch) => {
-    // const prevState = getState();
-    return WalletApi.getOwnedWallet()
-      .then(rawJson => {
-        dispatch(loadOwnedWalletSuccess(Wallet.from(rawJson)));
-      }).catch(error => {
-        dispatch(loadOwnedWalletFailure());
-        throw(error);
-      });
-  };
-}
+/**
+ * Load authenticated user's wallet and on fetch return update redux state
+ * @return {Promise} Owner's wallet promise
+ */
+export const loadOwnedWallet = () => dispatch => WalletApi.getOwnedWallet()
+  .then(rawJson => {
+    dispatch(loadOwnedWalletSuccess(Wallet.from(rawJson)));
+  }).catch(error => {
+    dispatch(loadOwnedWalletFailure());
+    throw(error);
+  });

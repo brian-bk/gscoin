@@ -4,7 +4,13 @@ import { Redirect } from 'react-router-dom';
 
 import WalletApi from '../../api/WalletApi';
 
+/**
+ * Create wallet form presented to user
+ * @class
+ * @extends React.Component
+ */
 class CreateWalletForm extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -14,6 +20,12 @@ class CreateWalletForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  /**
+   * Handle form submit, if a wallet is created also reload
+   * owned wallet and then redirect.
+   * @method
+   * @param {Proxy} event 
+   */
   handleSubmit(event) {
     event.preventDefault();
     this.setState({ isSubmitting: true });
@@ -48,9 +60,9 @@ class CreateWalletForm extends Component {
 }
 
 CreateWalletForm.propTypes = {
+  loadOwnedWallet: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   wallet: PropTypes.object.isRequired,
-  loadOwnedWallet: PropTypes.func.isRequired,
 };
 
 export default CreateWalletForm;

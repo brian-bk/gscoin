@@ -11,6 +11,7 @@ import './styles/index.css';
 
 const store = configureStore();
 
+// Load owned wallet and auth user on page load
 store.dispatch(loadOwnedWallet());
 store.dispatch(loadAuthUser());
 

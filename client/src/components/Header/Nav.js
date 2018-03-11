@@ -3,9 +3,14 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import * as MaterialDesign from 'react-icons/lib/md';
 
-import UserOwnerWalletForm from '../../containers/Header/UserOwnerWalletForm';
 import UserAuthForm from '../../containers/Header/UserAuthForm';
+import UserOwnerWalletForm from '../../containers/Header/UserOwnerWalletForm';
 
+/**
+ * Nav component
+ * @class
+ * @extends React.Component
+ */
 class Nav extends Component {
 
   constructor(props) {
@@ -14,20 +19,24 @@ class Nav extends Component {
       isCollapse: true,
     };
 
-    this.onClickCreateWallet = this.onClickCreateWallet.bind(this);
     this.toggleNavbarContent = this.toggleNavbarContent.bind(this);
   }
 
+  /**
+   * Collapse when we are on a new page
+   * @param {object} nextProps 
+   */
   componentWillReceiveProps(nextProps) {
     if(this.props.pageUrl !== nextProps.pageUrl) {
       this.setState({ isCollapse: true });
     }
   }
 
-  onClickCreateWallet(event) {
-    event.preventDefault();
-  }
-
+  /**
+   * Toggle the navbar content
+   * @method
+   * @param {Proxy} event 
+   */
   toggleNavbarContent(event) {
     event.preventDefault();
     this.setState({ isCollapse: !this.state.isCollapse });
